@@ -1,0 +1,12 @@
+.icon {
+  width: 24px;
+  height: 24px;
+  color: #334155;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.icon:hover {
+  color: #2563eb;
+  transform: scale(1.1);
+}
