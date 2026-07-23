@@ -1,78 +1,99 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 
 function Students() {
-  const students = [
-    {
-      id: 1,
-      name: "Ahmet",
-      age: 20,
-      department: "Bilgisayar",
-    },
-    {
-      id: 2,
-      name: "Mehmet",
-      age: 22,
-      department: "Elektrik",
-    },
-    {
-      id: 3,
-      name: "Ayşe",
-      age: 21,
-      department: "Makine",
-    },
-    {
-      id: 4,
-      name: "Zeynep",
-      age: 23,
-      department: "Yazılım",
-    },
-  ];
 
-  const [selectedStudent, setSelectedStudent] = useState(null);
+ const [value,setValue] = useState("");
 
-  function showDetails(id) {
-    const foundStudent = students.find(
-      (student) => student.id === id
-    );
+  const [students, setStudents] = useState([
+    { isim: "Ali", gectiMi: false },
+    { isim: "Veli", gectiMi: false },
+    { isim: "Ayşe", gectiMi: true },
+  ]);
 
-    setSelectedStudent(foundStudent);
+  function gecmeDurumu(index) {
+    const yeniStudents = students.map((student, i) => {
+      if (i === index) {
+        return {
+          ...student,
+          gectiMi: !student.gectiMi
+        }
+      }
+
+      return student;
+    })
+
+    setStudents(yeniStudents);
+  }
+
+
+  function ogrenciSil(index){
+    const yeniStudent = students.filter((_,i) => index !== i);
+    setStudents(yeniStudent);
+  }
+
+  function isimDegistir(index){
+    const yeniStudent = students.map((student,i)=>{
+      if(index === i && value != "" ){
+        return {
+          ...student,
+          isim : value
+        }
+      }
+      return student
+    })
+    setStudents(yeniStudent);
+    setValue("");
   }
 
   return (
-    <div className="p-5">
-      <h1 className="mb-5 text-2xl font-bold">
-        Öğrenciler
-      </h1>
+    <div className="min-h-screen bg-gray-100 p-8">
 
-      {students.map((student) => (
-        <div
-          className="mb-4 flex items-center gap-6"
-          key={student.id}
-        >
-          <div>{student.name}</div>
+      <div className="max-w-md mx-auto space-y-4">
 
-          <button
-            onClick={() => showDetails(student.id)}
-            className="rounded-2xl bg-black p-2 text-white"
+        {students.map((student, index) => (
+          <div
+            key={index}
+            className="bg-white border rounded-xl p-4 shadow-sm"
           >
-            Detay Görüntüle
-          </button>
-        </div>
-      ))}
+            <h2 className="text-xl font-bold">
+              {student.isim}
+            </h2>
 
-      {selectedStudent && (
-        <div className="mt-8 rounded-lg border p-4">
-          <h2 className="mb-3 text-xl font-bold">
-            Seçilen Öğrenci
-          </h2>
+            <p className="mt-1 text-gray-600">
+              {student.gectiMi ? "Geçti" : "Kaldı"}
+            </p>
 
-          <div>İsim: {selectedStudent.name}</div>
-          <div>Yaş: {selectedStudent.age}</div>
-          <div>Bölüm: {selectedStudent.department}</div>
-        </div>
-      )}
+            <div className="flex gap-2 mt-4">
+
+              <button
+                onClick={() => gecmeDurumu(index)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+              >
+                Değiştir
+              </button>
+
+              <button
+                onClick={() => ogrenciSil(index)}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg"
+              >
+                Sil
+              </button>
+
+                <button
+                onClick={() => isimDegistir(index)}
+                className="px-4 py-2 bg-green-500 text-white rounded-lg"
+              >
+                Değiştir
+              </button>
+
+            </div>
+          </div>
+        ))}
+          <input value={value} onChange={(e) => setValue(e.target.value)} className='rounded-2xl border-2' placeholder='isim gir' type="text" />
+
+      </div>
     </div>
-  );
+  )
 }
 
-export default Students;
+export default Students
